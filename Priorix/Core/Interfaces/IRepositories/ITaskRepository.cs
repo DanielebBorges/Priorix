@@ -2,9 +2,9 @@
 {
     public interface ITaskRepository
     {
-        TarefaOutputDTO Cadastrar(TarefaInputDTO dto);
-        TarefaOutputDTO Priorizar(int id, string metodo); 
-        IEnumerable<TarefaOutputDTO> Listar();
-        RelatorioDTO GerarRelatorio();
+          void Add(Task task);
+          IEnumerable<Task> GetAll();
+          Task GetById(int id);
+          void Update(Task task);
     }
 }
