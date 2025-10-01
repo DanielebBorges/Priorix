@@ -3,7 +3,7 @@
     public interface ITaskService
     {
           TaskOutputDTO Cadastrar(TaskInputDTO dto);
-          TaskOutputDTO Priorizar(int id, string metodo); 
+          TaskOutputDTO Priority(int id, string metodo); 
           IEnumerable<TaskOutputDTO> Listar();
           RelatorioDTO GerarRelatorio()
     }
