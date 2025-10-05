@@ -1,7 +1,7 @@
 ﻿
 namespace Priorix.Priorix.Core.Entities
 {
-    public class PriorityHistory
+    public class TaskHistory
     {
         public int Id { get; set; }
         public int TaskId { get; set; }
