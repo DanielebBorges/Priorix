@@ -1,11 +1,12 @@
-using global::Priorix.Priorix.Core.Entities;
-namespace Priorix.Core.Interfaces.Repositories
+using System.Collections.Generic;
+using Priorix.Core.Entities;
+using Priorix.Priorix.Core.Entities;
+
+namespace Priorix.Core.Interfaces
 {
     public interface ITaskHistoryRepository
     {
         void Add(TaskHistory history);
-        IEnumerable<TaskHistory> GetByTaskId(int taskId);
+        List<TaskHistory> GetByTaskId(int taskId);
     }
 }
-
-
