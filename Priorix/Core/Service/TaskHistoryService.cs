@@ -1,39 +1,35 @@
+using Priorix.Core.Interfaces;
 using Priorix.Core.Interfaces.Repositories;
 using Priorix.Priorix.Core.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace Priorix.Core.Service
+namespace Priorix.Core.Services
 {
     public class TaskHistoryService
     {
-        private readonly ITaskHistoryRepository _repository;
+        private readonly ITaskHistoryRepository _historyRepository;
 
-        public TaskHistoryService(ITaskHistoryRepository repository)
+        public TaskHistoryService(ITaskHistoryRepository historyRepository)
         {
-            _repository = repository;
+            _historyRepository = historyRepository;
         }
 
-        public void RegistrarHistorico(int taskId, int userId, string tipo, string valorAntigo, string valorNovo)
+        public void RegisterAction(int taskId, string action)
         {
             var history = new TaskHistory
             {
                 TaskId = taskId,
-                ChangedByUserId = userId,
-                ChangeType = tipo,
-                OldValue = valorAntigo,
-                NewValue = valorNovo,
-                ChangeDate = DateTime.UtcNow
+                Action = action
             };
 
-            _repository.Add(history);
+            _historyRepository.Add(history);
         }
 
-        public IEnumerable<TaskHistory> ObterHistorico(int taskId)
+        public List<TaskHistory> GetHistory(int taskId)
         {
-            return _repository.GetByTaskId(taskId);
+            return _historyRepository.GetByTaskId(taskId);
         }
     }
 }
-
 
