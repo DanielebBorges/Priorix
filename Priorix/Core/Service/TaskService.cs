@@ -1,64 +1,53 @@
-﻿namespace Priorix.Priorix.Core.Service
+﻿﻿using Priorix.Priorix.Core.Entities;
+using Priorix.Priorix.Core.Interfaces.IRepositories;
+using Priorix.Priorix.Core.Interfaces.IServices;
+
+namespace Priorix.Priorix.Core.Service
 {
-    public class TaskService
+    public class TaskService : ITaskService
     {
-        private readonly ITaskRepository _repository;
-    private readonly IMapper _mapper;
+        private readonly ITaskRepository _taskRepository;
 
-    public TaskService(ITaskRepository repository, IMapper mapper)
-    {
-        _repository = repository;
-        _mapper = mapper;
-    }
-
-    public TaskOutputDTO Cadastrar(TaskInputDTO dto)
-    {
-        var task = _mapper.Map<Task>(dto);
-        task.DataCriacao = DateTime.UtcNow;
-        _repository.Add(task);
-        return _mapper.Map<TarefaOutputDTO>(task);
-    }
-
-    public TarefaOutputDTO Priorizar(int id, string metodo)
-    {
-        var task = _repository.GetById(id);
-        if (task == null)
-            throw new Exception("Tarefa não encontrada");
-
-        double prioridade = metodo.ToUpper() switch
+        public TaskService(ITaskRepository taskRepository)
         {
-            "RICE" => (tarefa.Reach * tarefa.Impact * tarefa.Confidence) / task.Effort,
-            "WSJF" => (tarefa.ValorNegocio + tarefa.Urgencia + tarefa.Risco) / task.Effort,
-            _ => throw new ArgumentException("Método de priorização inválido")
-        };
+            _taskRepository = taskRepository;
+        }
 
-        task.Priority = priority;
-        task.JustificativaIA = $"Prioridade calculada usando o método {metodo}.";
-        _repository.Update(task);
-
-        return _mapper.Map<TaskOutputDTO>(tarefa);
-    }
-
-    public IEnumerable<TaskOutputDTO> Listar()
-    {
-        var task = _repository.GetAll();
-        return _mapper.Map<IEnumerable<TaskOutputDTO>>(task);
-    }
-
-    public RelatorioDTO GerarRelatorio()
-    {
-        var task = _repository.GetAll();
-        var concluidas = task.Where(t => t.DataConclusao.HasValue).ToList();
-
-        double mediaConclusao = concluidas.Any()
-            ? concluidas.Average(t => (t.DataConclusao.Value - t.DataCriacao).TotalDays)
-            : 0;
-
-        return new RelatorioDTO
+        public void CreateTask(Task task)
         {
-            TotalTask = task.Count(),
-            TaskConcluidas = concluidas.Count,
-            MediaDiasConclusao = Math.Round(mediaConclusao, 2),
-            TaskPriorityAlta = task.Count(t => t.Priority >= 8)
+            _taskRepository.AddTask(task);
+        }
+
+        public List<Task> GetAllTasks()
+        {
+            return _taskRepository.GetTasks();
+        }
+
+        public Task GetTaskById(int id)
+        {
+            try
+            {
+                return _taskRepository.FindById(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void UpdateTask(Task task)
+        {
+            _taskRepository.UpdateTask(task);
+        }
+
+        public void DeleteTask(int id)
+        {
+            _taskRepository.DeleteTask(id);
+        }
+
+        public bool TaskExists(int id)
+        {
+            return _taskRepository.TaskExists(id);
+        }
     }
 }
