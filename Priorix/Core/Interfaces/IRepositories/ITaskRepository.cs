@@ -1,10 +1,15 @@
-﻿namespace Priorix.Priorix.Core.Interfaces.IRepositories
+﻿using Priorix.Priorix.Core.Entities;
+
+namespace Priorix.Priorix.Core.Interfaces.IRepositories
 {
     public interface ITaskRepository
     {
-          void Add(Task task);
-          IEnumerable<Task> GetAll();
-          Task GetById(int id);
-          void Update(Task task);
+        public List<Task> GetTasks();
+        public Task FindById(int id);
+        public void AddTask(Task task);
+        public void UpdateTask(Task task);
+        public void DeleteTask(int id);
+        public bool TaskExists(int id);
     }
 }
+
