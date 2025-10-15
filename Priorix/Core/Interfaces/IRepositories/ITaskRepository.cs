@@ -1,4 +1,5 @@
 ﻿using Priorix.Priorix.Core.Entities;
+using Task = Priorix.Priorix.Core.Entities.Task;
 
 namespace Priorix.Priorix.Core.Interfaces.IRepositories
 {
